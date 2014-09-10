@@ -145,7 +145,7 @@ void loop()
       newMode = MODE_MED;
       //newMode = MODE_OFF;
     break;
-  case MODE_BLINKING_PREVIEW:
+  case MODE_NULL:
     // This mode exists just to ignore this button release.
     if (btnDown && !newBtnDown)
       newMode = MODE_BLINKING;
@@ -190,7 +190,7 @@ void loop()
       analogWrite(DPIN_DRV_EN, 255);
       break;
     case MODE_BLINKING:
-    case MODE_BLINKING_PREVIEW:
+    case MODE_NULL:
       Serial.println("Mode = blinking");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
