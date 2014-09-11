@@ -189,8 +189,8 @@ void loop()
       digitalWrite(DPIN_DRV_MODE, HIGH);
       analogWrite(DPIN_DRV_EN, 255);
       break;
-    case MODE_BLINKING:
     case MODE_NULL:
+    case MODE_BLINKING:
       Serial.println("Mode = blinking");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
