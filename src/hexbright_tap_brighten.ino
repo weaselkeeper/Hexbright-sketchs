@@ -2,7 +2,7 @@
 
   Firmware for HexBright FLEX 
   V-0.1 Dec 1013
-  Reverse order button from factory settings.
+  Tap to inc/dec intensity
   
 */
 
