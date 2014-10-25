@@ -1,9 +1,9 @@
-/* 
+/*
 
-  Firmware for HexBright FLEX 
+  Firmware for HexBright FLEX
   V-0.1 Dec 1013
   Tap to inc/dec intensity
-  
+
 */
 
 #include <math.h>
@@ -35,7 +35,7 @@ boolean btnDown = false;
 
 void setup()
 {
-  // We just powered on!  That means either we got plugged 
+  // We just powered on!  That means either we got plugged
   // into USB, or the user is pressing the power button.
   pinMode(DPIN_PWR,      INPUT);
   digitalWrite(DPIN_PWR, LOW);
@@ -47,11 +47,32 @@ void setup()
   pinMode(DPIN_DRV_EN,   OUTPUT);
   digitalWrite(DPIN_DRV_MODE, LOW);
   digitalWrite(DPIN_DRV_EN,   LOW);
-  
+
   // Initialize serial busses
   Serial.begin(9600);
   Wire.begin();
-  
+
+
+  // Configure accelerometer
+  byte config[] = {
+    ACC_REG_INTS,  // First register (see next line)
+    0xE4,  // Interrupts: shakes, taps
+    0x00,  // Mode: not enabled yet
+    0x00,  // Sample rate: 120 Hz
+    0x0F,  // Tap threshold
+    0x10   // Tap debounce samples
+  };
+  Wire.beginTransmission(ACC_ADDRESS);
+  Wire.write(config, sizeof(config));
+  Wire.endTransmission();
+
+  // Enable accelerometer
+  byte enable[] = {ACC_REG_MODE, 0x01};  // Mode: active!
+  Wire.beginTransmission(ACC_ADDRESS);
+  Wire.write(enable, sizeof(enable));
+  Wire.endTransmission();
+
+
   btnTime = millis();
   btnDown = digitalRead(DPIN_RLED_SW);
   mode = MODE_OFF;
@@ -63,7 +84,7 @@ void loop()
 {
   static unsigned long lastTempTime;
   unsigned long time = millis();
-  
+
   // Check the state of the charge controller
   int chargeState = analogRead(APIN_CHARGE);
   if (chargeState < 128)  // Low - charging
@@ -76,9 +97,9 @@ void loop()
   }
   else // Hi-Z - shutdown
   {
-    digitalWrite(DPIN_GLED, LOW);    
+    digitalWrite(DPIN_GLED, LOW);
   }
-  
+
   // Check the temperature sensor
   if (time-lastTempTime > 1000)
   {
@@ -111,12 +132,12 @@ void loop()
     digitalWrite(DPIN_DRV_EN, (time%300)<75);
     break;
   }
-  
+
   // Periodically pull down the button's pin, since
   // in certain hardware revisions it can float.
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
-  
+
   // Check for mode changes
   byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
