@@ -130,11 +130,11 @@ void loop()
     break;
   case MODE_VLOW:
     if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_OFF;
+      newMode = MODE_MED;
     break;
   case MODE_LOW:
     if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_VLOW;
+      newMode = MODE_OFF;
     break;
   case MODE_MED:
     if (btnDown && !newBtnDown && (time-btnTime)>50)
@@ -142,7 +142,7 @@ void loop()
     break;
   case MODE_HIGH:
     if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_MED;
+      newMode = MODE_VLOW;
     break;
   case MODE_BLINKING_PREVIEW:
     // This mode exists just to ignore this button release.
