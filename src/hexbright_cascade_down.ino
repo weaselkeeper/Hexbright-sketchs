@@ -138,7 +138,7 @@ void loop()
     if (btnDown && !newBtnDown && (time-btnTime)>500)
       newMode = MODE_OFF;
     else if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_OFF;
+      newMode = MODE_HIGH;
     break;
   case MODE_MED:
     if (btnDown && !newBtnDown && (time-btnTime)>500)
