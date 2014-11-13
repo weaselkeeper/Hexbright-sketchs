@@ -131,24 +131,28 @@ void loop()
   case MODE_VLOW:
     if (btnDown && !newBtnDown && (time-btnTime)>500)
       newMode = MODE_OFF;
+      Serial.println("Turning off");
     else if (btnDown && !newBtnDown && (time-btnTime)>50)
       newMode = MODE_MED;
     break;
   case MODE_LOW:
     if (btnDown && !newBtnDown && (time-btnTime)>500)
       newMode = MODE_OFF;
+      Serial.println("Turning off");
     else if (btnDown && !newBtnDown && (time-btnTime)>50)
       newMode = MODE_HIGH;
     break;
   case MODE_MED:
     if (btnDown && !newBtnDown && (time-btnTime)>500)
       newMode = MODE_OFF;
+      Serial.println("Turning off");
     else if (btnDown && !newBtnDown && (time-btnTime)>50)
       newMode = MODE_LOW;
     break;
   case MODE_HIGH:
     if (btnDown && !newBtnDown && (time-btnTime)>500)
       newMode = MODE_OFF;
+      Serial.println("Turning off");
     else if (btnDown && !newBtnDown && (time-btnTime)>50)
       newMode = MODE_VLOW;
     break;
@@ -160,6 +164,7 @@ void loop()
   case MODE_BLINKING:
     if (btnDown && !newBtnDown && (time-btnTime)>50)
       newMode = MODE_OFF;
+      Serial.println("Turning off");
     break;
   }
 
