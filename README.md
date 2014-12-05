@@ -2,7 +2,7 @@ Hexbright-sketchs
 =================
 
 Sketches for the hexbright arduino compatible flashlight.
-
+Modified from example sketches from hexbright community.
 
 hexbright_cascade_down.ino
 	1st click, Max power, 500+ Lumens
