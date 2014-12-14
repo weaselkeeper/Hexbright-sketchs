@@ -160,7 +160,7 @@ void loop()
     if (btnDown && !newBtnDown && (time-btnTime)>500) {
       newMode = MODE_OFF;
       Serial.println("Turning off");
-    } else if (btnDown && !newBtnDown && (time-btnTime)>500)
+    } else if (btnDown && !newBtnDown && (time-btnTime)>50)
       newMode = MODE_MED;
     break;
   case MODE_LOW:
