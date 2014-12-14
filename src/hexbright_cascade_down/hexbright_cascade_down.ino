@@ -153,6 +153,8 @@ void loop()
   switch (mode)
   {
   case MODE_OFF:
+    if (btnDown && readAccelAngleXZ() < -9) 
+      newMode = MODE_VLOW;
     if (btnDown && !newBtnDown && (time-btnTime)>20)
       newMode = MODE_HIGH;
     if (btnDown && newBtnDown && (time-btnTime)>500)
