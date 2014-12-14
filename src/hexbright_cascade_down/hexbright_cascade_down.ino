@@ -96,7 +96,7 @@ void loop()
   
   if (time-lastanglecheck > 1000) // recheck angle
   {
-  float angle = readAccelAngleXZ();
+  int angle = readAccelAngleXZ();
   }
   
   // Check the state of the charge controller
@@ -281,10 +281,14 @@ void readAccel(char *acc)
   }
 }
 
-float readAccelAngleXZ()
+int readAccelAngleXZ()
 {
   char acc[3];
+  int angle;
   readAccel(acc);
-  return atan2(acc[0], acc[2]);
+  angle = acc[1];
+  Serial.println(angle);
+  //return atan2(acc[0], acc[2]);
+  return angle;
 }
 
