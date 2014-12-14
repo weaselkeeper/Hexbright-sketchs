@@ -26,6 +26,15 @@
 #define MODE_HIGH               4
 #define MODE_BLINKING           5
 #define MODE_BLINKING_PREVIEW   6
+// Accel stuff
+#define ACC_ADDRESS             0x4C
+#define ACC_REG_XOUT            0
+#define ACC_REG_YOUT            1
+#define ACC_REG_ZOUT            2
+#define ACC_REG_TILT            3
+#define ACC_REG_INTS            6
+#define ACC_REG_MODE            7
+
 
 // State
 byte mode = 0;
@@ -52,6 +61,26 @@ void setup()
   Serial.begin(9600);
   Wire.begin();
   
+  // Configure accelerometer
+  byte config[] = {
+    ACC_REG_INTS,  // First register (see next line)
+    0xE4,  // Interrupts: shakes, taps
+    0x00,  // Mode: not enabled yet
+    0x00,  // Sample rate: 120 Hz
+    0x0F,  // Tap threshold
+    0x10   // Tap debounce samples
+  };
+  Wire.beginTransmission(ACC_ADDRESS);
+  Wire.write(config, sizeof(config));
+  Wire.endTransmission();
+
+  // Enable accelerometer
+  byte enable[] = {ACC_REG_MODE, 0x01};  // Mode: active!
+  Wire.beginTransmission(ACC_ADDRESS);
+  Wire.write(enable, sizeof(enable));
+  Wire.endTransmission();
+
+  
   btnTime = millis();
   btnDown = digitalRead(DPIN_RLED_SW);
   mode = MODE_OFF;
@@ -62,7 +91,13 @@ void setup()
 void loop()
 {
   static unsigned long lastTempTime;
+  static unsigned long lastanglecheck;
   unsigned long time = millis();
+  
+  if (time-lastanglecheck > 1000) // recheck angle
+  {
+  float angle = readAccelAngleXZ();
+  }
   
   // Check the state of the charge controller
   int chargeState = analogRead(APIN_CHARGE);
@@ -120,6 +155,8 @@ void loop()
   // Check for mode changes
   byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
+
+
   switch (mode)
   {
   case MODE_OFF:
@@ -132,7 +169,7 @@ void loop()
     if (btnDown && !newBtnDown && (time-btnTime)>500) {
       newMode = MODE_OFF;
       Serial.println("Turning off");
-    } else if (btnDown && !newBtnDown && (time-btnTime)>50)
+    } else if (btnDown && !newBtnDown && (time-btnTime)>500)
       newMode = MODE_MED;
     break;
   case MODE_LOW:
@@ -192,7 +229,7 @@ void loop()
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
-      analogWrite(DPIN_DRV_EN, 8);
+      analogWrite(DPIN_DRV_EN, 4);
       break;    
     case MODE_MED:
       Serial.println("Mode = medium");
@@ -227,5 +264,36 @@ void loop()
     btnDown = newBtnDown;
     delay(50);
   }
+}
+
+
+void readAccel(char *acc)
+{
+  while (1)
+  {
+    Wire.beginTransmission(ACC_ADDRESS);
+    Wire.write(ACC_REG_XOUT);
+    Wire.endTransmission(false);       // End, but do not stop!
+    Wire.requestFrom(ACC_ADDRESS, 3);  // This one stops.
+
+    for (int i = 0; i < 3; i++)
+    {
+      if (!Wire.available())
+        continue;
+      acc[i] = Wire.read();
+      if (acc[i] & 0x40)  // Indicates failed read; redo!
+        continue;
+      if (acc[i] & 0x20)  // Sign-extend
+        acc[i] |= 0xC0;
+    }
+    break;
+  }
+}
+
+float readAccelAngleXZ()
+{
+  char acc[3];
+  readAccel(acc);
+  return atan2(acc[0], acc[2]);
 }
 
