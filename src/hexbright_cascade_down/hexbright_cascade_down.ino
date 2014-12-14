@@ -94,9 +94,11 @@ void loop()
   static unsigned long lastanglecheck;
   unsigned long time = millis();
   
-  if (time-lastanglecheck > 1000) // recheck angle
+  if (time-lastanglecheck > 1000)// recheck angle
   {
+  lastanglecheck = time;
   int angle = readAccelAngleXZ();
+  Serial.println(angle);
   }
   
   // Check the state of the charge controller
@@ -287,7 +289,6 @@ int readAccelAngleXZ()
   int angle;
   readAccel(acc);
   angle = acc[1];
-  Serial.println(angle);
   //return atan2(acc[0], acc[2]);
   return angle;
 }
