@@ -137,15 +137,6 @@ void loop()
       mode = MODE_LOW;
     }
   }
-
-  // Do whatever this mode does
-  switch (mode)
-  {
-  case MODE_BLINKING:
-  case MODE_BLINKING_PREVIEW:
-    digitalWrite(DPIN_DRV_EN, (time%300)<75);
-    break;
-  }
   
   // Periodically pull down the button's pin, since
   // in certain hardware revisions it can float.
