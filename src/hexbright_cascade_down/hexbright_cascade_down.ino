@@ -1,6 +1,6 @@
 /* 
 
-  Factory firmware for HexBright FLEX 
+  Modified Factory firmware for HexBright FLEX 
   v2.4  Dec 6, 2012
   
 */
