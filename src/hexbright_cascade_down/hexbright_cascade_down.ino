@@ -146,6 +146,10 @@ void loop()
   pinMode(DPIN_RLED_SW, INPUT);
   
   // Check for mode changes
+  if (btnDown && readAccelAngleXZ() < -9)
+  {
+    mode = MODE_VLOW
+  }
   byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
 
@@ -290,6 +294,7 @@ int readAccelAngleXZ()
   char acc[3];
   int angle;
   readAccel(acc);
+  //angle of lens up/down.
   angle = acc[1];
   //return atan2(acc[0], acc[2]);
   return angle;
