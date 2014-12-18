@@ -148,7 +148,7 @@ void loop()
   // Check for mode changes
   if (btnDown && readAccelAngleXZ() < -9)
   {
-    mode = MODE_VLOW
+    mode = MODE_VLOW;
   }
   byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
