@@ -145,64 +145,21 @@ void loop()
   // in certain hardware revisions it can float.
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
-
-  byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
 
+  if (btnDown && (readAccelAngleXZ() < -9))
+    mode = MODE_VLOW;
+  else if (btnDown && (readAccelAngleXZ() < 0))
+    mode = MODE_HIGH;
+  else if (btnDown && (readAccelAngleXZ() > 5))
+    mode = MODE_MED;
 
-  switch (mode)
-  {
-  case MODE_OFF:
-    if (btnDown && readAccelAngleXZ() < -9)
-      newMode = MODE_ANGLEDOWN;
-    if (btnDown && !newBtnDown && (time-btnTime)>20)
-      newMode = MODE_HIGH;
-    if (btnDown && newBtnDown && (time-btnTime)>500)
-      newMode = MODE_BLINKING_PREVIEW;
-    break;
-  case MODE_VLOW:
-    if (btnDown && !newBtnDown && (time-btnTime)> 50)
-      newMode = MODE_MED;
-    if (btnDown && !newBtnDown && (time-btnTime)>500)
-      newMode = MODE_OFF;
-    break;
-  case MODE_LOW:
-    if (btnDown && !newBtnDown && (time-btnTime)>500) {
-      newMode = MODE_OFF;
-      Serial.println("Turning off");
-    } else if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_HIGH;
-    break;
-  case MODE_MED:
-    if (btnDown && !newBtnDown && (time-btnTime)>500) {
-      newMode = MODE_OFF;
-      Serial.println("Turning off");
-    } else if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_LOW;
-    break;
-  case MODE_HIGH:
-    if (btnDown && !newBtnDown && (time-btnTime)>500) {
-      newMode = MODE_OFF;
-      Serial.println("Turning off");
-    } else if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_VLOW;
-    break;
-  case MODE_BLINKING_PREVIEW:
-    // This mode exists just to ignore this button release.
-    if (btnDown && !newBtnDown)
-      newMode = MODE_BLINKING;
-    break;
-  case MODE_BLINKING:
-    if (btnDown && !newBtnDown && (time-btnTime)>50)
-      newMode = MODE_OFF;
-      Serial.println("Turning off");
-    break;
-  }
 
-  // Do the mode transitions
-  if (newMode != mode)
-  {
-    switch (newMode)
+  if (btnDown && !newBtnDown && (time-btnTime)>500)
+    mode = MODE_OFF;
+  
+   // Do the mode transitions
+    switch (mode)
     {
     case MODE_OFF:
       Serial.println("Mode = off");
@@ -217,14 +174,6 @@ void loop()
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 64);
-      break;
-    case MODE_ANGLEDOWN:
-      Serial.println("Mode = angledown");
-      pinMode(DPIN_PWR, OUTPUT);
-      digitalWrite(DPIN_PWR, HIGH);
-      digitalWrite(DPIN_DRV_MODE, LOW);
-      analogWrite(DPIN_DRV_EN, 4);
-      newMode = MODE_VLOW;
       break;
     case MODE_VLOW:
       Serial.println("Mode = vlow");
@@ -255,9 +204,6 @@ void loop()
       digitalWrite(DPIN_DRV_MODE, HIGH);
       break;
     }
-
-    mode = newMode;
-  }
 
   // Remember button state so we can detect transitions
   if (newBtnDown != btnDown)
