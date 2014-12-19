@@ -3,6 +3,13 @@
   Modified Factory firmware for HexBright FLEX
   v2.4  Dec 6, 2012
 
+
+Shortpress changes mode, based on orientation.
+light up, medium
+light down, low
+light horizontal, high
+long press turns off.
+
 */
 
 #include <math.h>
