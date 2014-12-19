@@ -1,8 +1,8 @@
-/* 
+/*
 
-  Modified Factory firmware for HexBright FLEX 
+  Modified Factory firmware for HexBright FLEX
   v2.4  Dec 6, 2012
-  
+
 */
 
 #include <math.h>
@@ -26,6 +26,7 @@
 #define MODE_HIGH               4
 #define MODE_BLINKING           5
 #define MODE_BLINKING_PREVIEW   6
+#define MODE_ANGLEDOWN          7
 // Accel stuff
 #define ACC_ADDRESS             0x4C
 #define ACC_REG_XOUT            0
@@ -44,7 +45,7 @@ boolean btnDown = false;
 
 void setup()
 {
-  // We just powered on!  That means either we got plugged 
+  // We just powered on!  That means either we got plugged
   // into USB, or the user is pressing the power button.
   pinMode(DPIN_PWR,      INPUT);
   digitalWrite(DPIN_PWR, LOW);
@@ -56,11 +57,11 @@ void setup()
   pinMode(DPIN_DRV_EN,   OUTPUT);
   digitalWrite(DPIN_DRV_MODE, LOW);
   digitalWrite(DPIN_DRV_EN,   LOW);
-  
+
   // Initialize serial busses
   Serial.begin(9600);
   Wire.begin();
-  
+
   // Configure accelerometer
   byte config[] = {
     ACC_REG_INTS,  // First register (see next line)
@@ -80,7 +81,7 @@ void setup()
   Wire.write(enable, sizeof(enable));
   Wire.endTransmission();
 
-  
+
   btnTime = millis();
   btnDown = digitalRead(DPIN_RLED_SW);
   mode = MODE_OFF;
@@ -93,14 +94,14 @@ void loop()
   static unsigned long lastTempTime;
   static unsigned long lastanglecheck;
   unsigned long time = millis();
-  
+
   if (time-lastanglecheck > 1000)// recheck angle
   {
   lastanglecheck = time;
   int angle = readAccelAngleXZ();
   Serial.println(angle);
   }
-  
+
   // Check the state of the charge controller
   int chargeState = analogRead(APIN_CHARGE);
   if (chargeState < 128)  // Low - charging
@@ -113,9 +114,9 @@ void loop()
   }
   else // Hi-Z - shutdown
   {
-    digitalWrite(DPIN_GLED, LOW);    
+    digitalWrite(DPIN_GLED, LOW);
   }
-  
+
   // Check the temperature sensor
   if (time-lastTempTime > 1000)
   {
@@ -139,17 +140,12 @@ void loop()
       mode = MODE_LOW;
     }
   }
-  
+
   // Periodically pull down the button's pin, since
   // in certain hardware revisions it can float.
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
-  
-  // Check for mode changes
-  if (btnDown && readAccelAngleXZ() < -9)
-  {
-    mode = MODE_VLOW;
-  }
+
   byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
 
@@ -157,19 +153,18 @@ void loop()
   switch (mode)
   {
   case MODE_OFF:
-    if (btnDown && readAccelAngleXZ() < -9) 
-      newMode = MODE_VLOW;
+    if (btnDown && readAccelAngleXZ() < -9)
+      newMode = MODE_ANGLEDOWN;
     if (btnDown && !newBtnDown && (time-btnTime)>20)
       newMode = MODE_HIGH;
     if (btnDown && newBtnDown && (time-btnTime)>500)
       newMode = MODE_BLINKING_PREVIEW;
     break;
   case MODE_VLOW:
-    if (btnDown && !newBtnDown && (time-btnTime)>500) {
-      newMode = MODE_OFF;
-      Serial.println("Turning off");
-    } else if (btnDown && !newBtnDown && (time-btnTime)>50)
+    if (btnDown && !newBtnDown && (time-btnTime)> 50)
       newMode = MODE_MED;
+    if (btnDown && !newBtnDown && (time-btnTime)>500)
+      newMode = MODE_OFF;
     break;
   case MODE_LOW:
     if (btnDown && !newBtnDown && (time-btnTime)>500) {
@@ -223,13 +218,21 @@ void loop()
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 64);
       break;
+    case MODE_ANGLEDOWN:
+      Serial.println("Mode = angledown");
+      pinMode(DPIN_PWR, OUTPUT);
+      digitalWrite(DPIN_PWR, HIGH);
+      digitalWrite(DPIN_DRV_MODE, LOW);
+      analogWrite(DPIN_DRV_EN, 4);
+      newMode = MODE_VLOW;
+      break;
     case MODE_VLOW:
       Serial.println("Mode = vlow");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 4);
-      break;    
+      break;
     case MODE_MED:
       Serial.println("Mode = medium");
       pinMode(DPIN_PWR, OUTPUT);
