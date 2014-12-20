@@ -4,11 +4,15 @@
   v2.4  Dec 6, 2012
 
 
-Shortpress changes mode, based on orientation.
+
+When light off, long press will turn on mode until released. 
+Short press will turn on mode.
+When on, short press changes mode.
+long press turns off.
+
 light up, medium
 light down, low
 light horizontal, high
-long press turns off.
 
 */
 
