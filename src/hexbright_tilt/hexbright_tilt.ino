@@ -106,12 +106,8 @@ void loop()
   static unsigned long lastanglecheck;
   unsigned long time = millis();
 
-  if (time-lastanglecheck > 1000)// recheck angle
-  {
-  lastanglecheck = time;
-  int angle = readAccelAngleXZ();
-  Serial.println(angle);
-  }
+
+  
 
   // Check the state of the charge controller
   int chargeState = analogRead(APIN_CHARGE);
@@ -157,12 +153,15 @@ void loop()
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
-
-  if (btnDown && (readAccelAngleXZ() < -9))
+  // Read the angle
+  int angle = readAccelAngleXZ();
+  Serial.println(angle);
+  
+  if (btnDown && (angle < -9))
     mode = MODE_VLOW;
-  else if (btnDown && (readAccelAngleXZ() < 0))
+  else if (btnDown && (angle < 0))
     mode = MODE_HIGH;
-  else if (btnDown && (readAccelAngleXZ() > 5))
+  else if (btnDown && (angle > 5))
     mode = MODE_MED;
 
 
