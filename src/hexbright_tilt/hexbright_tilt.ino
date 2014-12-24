@@ -159,11 +159,10 @@ void loop()
   
   if (btnDown && (angle < -9))
     mode = MODE_VLOW;
-  else if (btnDown && (angle < 0))
-    mode = MODE_HIGH;
   else if (btnDown && (angle > 5))
     mode = MODE_MED;
-
+  else if (btnDown) // fallthrough to MODE_HIGH, but only change mode when button pushed.
+    mode = MODE_HIGH;
 
   if (btnDown && !newBtnDown && (time-btnTime)>500)
     mode = MODE_OFF;
