@@ -103,7 +103,6 @@ void setup()
 void loop()
 {
   static unsigned long lastTempTime;
-  static unsigned long lastanglecheck;
   unsigned long time = millis();
 
 
