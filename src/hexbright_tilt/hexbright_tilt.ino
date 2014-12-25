@@ -13,7 +13,6 @@ long press turns off.
 light up, medium
 light down, low
 light horizontal, high
-
 */
 
 #include <math.h>
@@ -47,12 +46,10 @@ light horizontal, high
 #define ACC_REG_INTS            6
 #define ACC_REG_MODE            7
 
-
 // State
 byte mode = 0;
 unsigned long btnTime = 0;
 boolean btnDown = false;
-
 
 void setup()
 {
@@ -105,9 +102,6 @@ void loop()
   static unsigned long lastTempTime;
   unsigned long time = millis();
 
-
-  
-
   // Check the state of the charge controller
   int chargeState = analogRead(APIN_CHARGE);
   if (chargeState < 128)  // Low - charging
@@ -155,7 +149,7 @@ void loop()
   // Read the angle
   int angle = readAccelAngleXZ();
   Serial.println(angle);
-  
+
   if (btnDown && (angle < -9))
     mode = MODE_VLOW;
   else if (btnDown && (angle > 5))
@@ -165,7 +159,7 @@ void loop()
 
   if (btnDown && !newBtnDown && (time-btnTime)>500)
     mode = MODE_OFF;
-  
+
    // Do the mode transitions
     switch (mode)
     {
