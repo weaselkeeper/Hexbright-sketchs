@@ -20,6 +20,8 @@ light horizontal, high
 
 // Settings
 #define OVERTEMP                340
+#define UP_min                  5
+#define DOWN_min                -9
 // Pin assignments
 #define DPIN_RLED_SW            2
 #define DPIN_GLED               5
@@ -146,9 +148,6 @@ void loop()
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
-  // Set high/low angle settings.
-  int UP_min = 5;
-  int DOWN_min = -9;
   // Read the angle
   int angle = readAccelAngleXZ();
   Serial.println(angle);
