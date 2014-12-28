@@ -1,8 +1,8 @@
-/* 
+/*
 
-  Factory firmware for HexBright FLEX 
+  Factory firmware for HexBright FLEX
   v2.4  Dec 6, 2012
-  
+
 */
 
 #include <math.h>
@@ -35,7 +35,7 @@ boolean btnDown = false;
 
 void setup()
 {
-  // We just powered on!  That means either we got plugged 
+  // We just powered on!  That means either we got plugged
   // into USB, or the user is pressing the power button.
   pinMode(DPIN_PWR,      INPUT);
   digitalWrite(DPIN_PWR, LOW);
@@ -47,11 +47,11 @@ void setup()
   pinMode(DPIN_DRV_EN,   OUTPUT);
   digitalWrite(DPIN_DRV_MODE, LOW);
   digitalWrite(DPIN_DRV_EN,   LOW);
-  
+
   // Initialize serial busses
   Serial.begin(9600);
   Wire.begin();
-  
+
   btnTime = millis();
   btnDown = digitalRead(DPIN_RLED_SW);
   mode = MODE_OFF;
@@ -63,7 +63,7 @@ void loop()
 {
   static unsigned long lastTempTime;
   unsigned long time = millis();
-  
+
   // Check the state of the charge controller
   int chargeState = analogRead(APIN_CHARGE);
   if (chargeState < 128)  // Low - charging
@@ -76,9 +76,9 @@ void loop()
   }
   else // Hi-Z - shutdown
   {
-    digitalWrite(DPIN_GLED, LOW);    
+    digitalWrite(DPIN_GLED, LOW);
   }
-  
+
   // Check the temperature sensor
   if (time-lastTempTime > 1000)
   {
@@ -111,12 +111,12 @@ void loop()
     digitalWrite(DPIN_DRV_EN, (time%300)<75);
     break;
   }
-  
+
   // Periodically pull down the button's pin, since
   // in certain hardware revisions it can float.
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
-  
+
   // Check for mode changes
   byte newMode = mode;
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
@@ -193,7 +193,7 @@ void loop()
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 8);
-      break;    
+      break;
     case MODE_MED:
       Serial.println("Mode = medium");
       pinMode(DPIN_PWR, OUTPUT);
