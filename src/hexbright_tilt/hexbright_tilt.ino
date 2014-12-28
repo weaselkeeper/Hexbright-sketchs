@@ -146,13 +146,16 @@ void loop()
   pinMode(DPIN_RLED_SW, OUTPUT);
   pinMode(DPIN_RLED_SW, INPUT);
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
+  // Set high/low angle settings.
+  int UP_min = 5;
+  int DOWN_min = -9;
   // Read the angle
   int angle = readAccelAngleXZ();
   Serial.println(angle);
 
-  if (btnDown && (angle < -9))
+  if (btnDown && (angle < DOWN_min))
     mode = MODE_VLOW;
-  else if (btnDown && (angle > 5))
+  else if (btnDown && (angle > UP_min))
     mode = MODE_MED;
   else if (btnDown) // fallthrough to MODE_HIGH, but only change mode when button pushed.
     mode = MODE_HIGH;
