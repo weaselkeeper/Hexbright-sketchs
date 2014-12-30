@@ -165,6 +165,13 @@ void loop()
    // Do the mode transitions
     switch (mode)
     {
+    case MODE_BLINKING:
+      Serial.println("mode = blinking");
+      pinMode(DPIN_PWR, OUTPUT);
+      digitalWrite(DPIN_PWR, HIGH);
+      digitalWrite(DPIN_DRV_MODE, HIGH);
+      digitalWrite(DPIN_DRV_EN, (time%80)<50);
+      break;
     case MODE_OFF:
       Serial.println("Mode = off");
       pinMode(DPIN_PWR, OUTPUT);
