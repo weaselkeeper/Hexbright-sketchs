@@ -8,7 +8,8 @@
 When light off, long press will turn on mode until released. 
 Short press will turn on mode.
 When on, short press changes mode.
-long press turns off.
+long press when pointed forward, blinking.
+long press when pointed up or down, turns off.
 
 light up, medium
 light down, low
@@ -158,8 +159,9 @@ void loop()
     mode = MODE_MED;
   else if (btnDown && !newBtnDown) // fallthrough to MODE_HIGH, but only change mode when button pushed.
     mode = MODE_HIGH;
-
-  if (btnDown && !newBtnDown && (time-btnTime)>500)
+  else if (btnDown && (time-btnTime> 200) && newBtnDown)
+    mode = MODE_BLINKING;
+  if (btnDown && !newBtnDown && (time-btnTime)>500 && (mode != MODE_HIGH))
     mode = MODE_OFF;
 
    // Do the mode transitions
