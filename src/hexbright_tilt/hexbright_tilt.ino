@@ -23,6 +23,7 @@ light horizontal, high
 #define OVERTEMP                340
 #define UP_min                  5
 #define DOWN_min                -9
+#define DEBUG                   0
 // Pin assignments
 #define DPIN_RLED_SW            2
 #define DPIN_GLED               5
