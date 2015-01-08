@@ -14,6 +14,8 @@ long press when pointed up or down, turns off.
 light up, medium
 light down, low
 light horizontal, high
+
+Enable DEBUG to see debug statements in serial console
 */
 
 #include <math.h>
