@@ -152,7 +152,9 @@ void loop()
   byte newBtnDown = digitalRead(DPIN_RLED_SW);
   // Read the angle
   int angle = readAccelAngleXZ();
+  if (DEBUG)
   Serial.println(angle);
+
 
   if (btnDown && (angle < DOWN_min))
     mode = MODE_VLOW;
@@ -166,52 +168,55 @@ void loop()
     mode = MODE_OFF;
 
    // Do the mode transitions
+    if (DEBUG)
+      Serial.println(mode);
     switch (mode)
     {
+
     case MODE_BLINKING:
-      Serial.println("mode = blinking");
+//      Serial.println("mode = blinking");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, HIGH);
       digitalWrite(DPIN_DRV_EN, (time%80)<50);
       break;
     case MODE_OFF:
-      Serial.println("Mode = off");
+//      Serial.println("Mode = off");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, LOW);
       digitalWrite(DPIN_DRV_MODE, LOW);
       digitalWrite(DPIN_DRV_EN, LOW);
       break;
     case MODE_LOW:
-      Serial.println("Mode = low");
+//      Serial.println("Mode = low");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 64);
       break;
     case MODE_VLOW:
-      Serial.println("Mode = vlow");
+//      Serial.println("Mode = vlow");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 4);
       break;
     case MODE_MED:
-      Serial.println("Mode = medium");
+//      Serial.println("Mode = medium");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
       analogWrite(DPIN_DRV_EN, 255);
       break;
     case MODE_HIGH:
-      Serial.println("Mode = high");
+//      Serial.println("Mode = high");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, HIGH);
       analogWrite(DPIN_DRV_EN, 255);
       break;
     case MODE_BLINKING_PREVIEW:
-      Serial.println("Mode = blinking");
+//      Serial.println("Mode = blinking");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, HIGH);
