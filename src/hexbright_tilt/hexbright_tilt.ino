@@ -26,6 +26,11 @@ Enable DEBUG to see debug statements in serial console
 #define UP_min                  5
 #define DOWN_min                -9
 #define DEBUG                   0
+#define VLOW_LIGHT              4
+#define LOW_LIGHT               64
+#define MED_LIGHT               255
+#define HIGH_LIGHT              255
+
 // Pin assignments
 #define DPIN_RLED_SW            2
 #define DPIN_GLED               5
@@ -194,28 +199,28 @@ void loop()
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
-      analogWrite(DPIN_DRV_EN, 64);
+      analogWrite(DPIN_DRV_EN, LOW_LIGHT);
       break;
     case MODE_VLOW:
 //      Serial.println("Mode = vlow");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
-      analogWrite(DPIN_DRV_EN, 4);
+      analogWrite(DPIN_DRV_EN, VLOW_LIGHT);
       break;
     case MODE_MED:
 //      Serial.println("Mode = medium");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, LOW);
-      analogWrite(DPIN_DRV_EN, 255);
+      analogWrite(DPIN_DRV_EN, MED_LIGHT);
       break;
     case MODE_HIGH:
 //      Serial.println("Mode = high");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
       digitalWrite(DPIN_DRV_MODE, HIGH);
-      analogWrite(DPIN_DRV_EN, 255);
+      analogWrite(DPIN_DRV_EN, HIGH_LIGHT);
       break;
     case MODE_BLINKING_PREVIEW:
 //      Serial.println("Mode = blinking");
