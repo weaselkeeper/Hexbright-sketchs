@@ -23,6 +23,7 @@ Enable DEBUG to see debug statements in serial console
 
 // Settings
 #define OVERTEMP                340
+#define TempRecheck             1000
 #define UP_min                  5
 #define DOWN_min                -9
 #define DEBUG                   0
@@ -129,7 +130,7 @@ void loop()
   }
 
   // Check the temperature sensor
-  if (time-lastTempTime > 1000)
+  if (time-lastTempTime > Temp_Recheck)
   {
     lastTempTime = time;
     int temperature = analogRead(APIN_TEMP);
