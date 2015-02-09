@@ -50,6 +50,7 @@ Enable DEBUG to see debug statements in serial console
 #define MODE_BLINKING           5
 #define MODE_BLINKING_PREVIEW   6
 #define MODE_ANGLEDOWN          7
+#define MODE_FIREFLY            8
 // Accel stuff
 #define ACC_ADDRESS             0x4C
 #define ACC_REG_XOUT            0
@@ -173,8 +174,10 @@ void loop()
     mode = MODE_HIGH;
   else if (btnDown && (time-btnTime> 200) && newBtnDown)
     mode = MODE_BLINKING;
-  if (btnDown && !newBtnDown && (time-btnTime)>500 && (mode != MODE_HIGH))
+  if (btnDown && !newBtnDown && (time-btnTime)>500 && (mode = MODE_MED))
     mode = MODE_OFF;
+  else if (btnDown && !newBtnDown && (time-btnTime)>500 && (mode = MODE_VLOW))
+    mode = MODE_FIREFLY;
 
    // Do the mode transitions
     if (DEBUG)
@@ -186,6 +189,13 @@ void loop()
 //      Serial.println("mode = blinking");
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, HIGH);
+      digitalWrite(DPIN_DRV_MODE, HIGH);
+      digitalWrite(DPIN_DRV_EN, (time%80)<50);
+      break;
+    case MODE_FIREFLY:
+//      Serial.println("mode = blinking");
+      pinMode(DPIN_PWR, OUTPUT);
+      digitalWrite(DPIN_PWR, LOW);
       digitalWrite(DPIN_DRV_MODE, HIGH);
       digitalWrite(DPIN_DRV_EN, (time%80)<50);
       break;
