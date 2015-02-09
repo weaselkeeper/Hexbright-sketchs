@@ -31,6 +31,7 @@ Enable DEBUG to see debug statements in serial console
 #define LOW_LIGHT               64
 #define MED_LIGHT               255
 #define HIGH_LIGHT              255
+#define Temp_Recheck            1000
 
 // Pin assignments
 #define DPIN_RLED_SW            2
