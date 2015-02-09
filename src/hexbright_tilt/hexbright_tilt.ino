@@ -165,19 +165,19 @@ void loop()
   if (DEBUG)
   Serial.println(angle);
 
-
-  if (btnDown && (angle < DOWN_min))
-    mode = MODE_VLOW;
-  else if (btnDown && (angle > UP_min))
-    mode = MODE_MED;
-  else if (btnDown && !newBtnDown) // fallthrough to MODE_HIGH, but only change mode when button pushed.
-    mode = MODE_HIGH;
-  else if (btnDown && (time-btnTime> 200) && newBtnDown)
-    mode = MODE_BLINKING;
-  if (btnDown && !newBtnDown && (time-btnTime)>500 && (mode = MODE_MED))
-    mode = MODE_OFF;
-  else if (btnDown && !newBtnDown && (time-btnTime)>500 && (mode = MODE_VLOW))
-    mode = MODE_FIREFLY;
+  if (btnDown)
+    if (angle < DOWN_min)
+      mode = MODE_VLOW;
+    else if (angle > UP_min)
+      mode = MODE_MED;
+    else if (!newBtnDown) // fallthrough to MODE_HIGH, but only change mode when button pushed.
+      mode = MODE_HIGH;
+    else if ((time-btnTime> 200) && newBtnDown)
+      mode = MODE_BLINKING;
+    if (!newBtnDown && (time-btnTime)>500 && (mode = MODE_MED))
+      mode = MODE_OFF;
+    else if (!newBtnDown && (time-btnTime)>500 && (mode = MODE_VLOW))
+      mode = MODE_FIREFLY;
 
    // Do the mode transitions
     if (DEBUG)
