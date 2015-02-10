@@ -165,7 +165,7 @@ void loop()
   if (DEBUG)
   Serial.println(angle);
 
-  if (btnDown)
+  if (btnDown) {
     if (angle < DOWN_min)
       mode = MODE_VLOW;
     else if (angle > UP_min)
@@ -178,7 +178,7 @@ void loop()
       mode = MODE_OFF;
     else if (!newBtnDown && (time-btnTime)>500 && (mode = MODE_VLOW))
       mode = MODE_FIREFLY;
-
+   }
    // Do the mode transitions
     if (DEBUG)
       Serial.println(mode);
@@ -197,7 +197,7 @@ void loop()
       pinMode(DPIN_PWR, OUTPUT);
       digitalWrite(DPIN_PWR, LOW);
       digitalWrite(DPIN_DRV_MODE, HIGH);
-      digitalWrite(DPIN_DRV_EN, (time%80)<50);
+      digitalWrite(DPIN_DRV_EN, (time%50)<50);
       break;
     case MODE_OFF:
 //      Serial.println("Mode = off");
