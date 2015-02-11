@@ -9,7 +9,8 @@ When light off, long press will turn on mode until released.
 Short press will turn on mode.
 When on, short press changes mode.
 long press when pointed forward, blinking.
-long press when pointed up or down, turns off.
+long press when pointed up turns off.
+long press when pointed down, firefly mode
 
 light up, medium
 light down, low
