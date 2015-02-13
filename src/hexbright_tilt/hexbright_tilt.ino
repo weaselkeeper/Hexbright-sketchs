@@ -176,12 +176,12 @@ void loop()
       mode = MODE_HIGH;
     }
     if (btnDown && !newBtnDown) {
-      if((time-btnTime> 200) && (mode == MODE_HIGH))
-        mode = MODE_BLINKING;
-      else if ((time-btnTime)>500 && (mode == MODE_MED))
+      if ((time-btnTime)>500 && (angle > UP_min))
         mode = MODE_OFF;
-      else if ((time-btnTime)>500 && (mode == MODE_VLOW))
+      else if ((time-btnTime)>500 && (angle < DOWN_min))
         mode = MODE_FIREFLY;
+      else if((time-btnTime> 200))
+        mode = MODE_BLINKING;
    }
    // Do the mode transitions
     if (DEBUG)
