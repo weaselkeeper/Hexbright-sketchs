@@ -203,11 +203,11 @@ void loop()
       digitalWrite(DPIN_DRV_EN, (time%80)<50);
       break;
     case MODE_FIREFLY:
-//      Serial.println("mode = blinking");
+//      Serial.println("mode = firefly");
       pinMode(DPIN_PWR, OUTPUT);
-      digitalWrite(DPIN_PWR, LOW);
-      digitalWrite(DPIN_DRV_MODE, HIGH);
-      digitalWrite(DPIN_DRV_EN, (time%50)<50);
+      digitalWrite(DPIN_PWR, HIGH);
+      digitalWrite(DPIN_DRV_MODE, LOW);
+      digitalWrite(DPIN_DRV_EN, (time%80)<50);
       break;
     case MODE_OFF:
 //      Serial.println("Mode = off");
