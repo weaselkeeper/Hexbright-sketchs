@@ -175,12 +175,12 @@ void loop()
     // fallthrough to MODE_HIGH, but only change mode when button pushed.
       mode = MODE_HIGH;
     }
-    if (btnDown && !newBtnDown) {
-      if ((time-btnTime)>500 && (angle > UP_min))
+    if (btnDown && !newBtnDown && ((time-btnTime) > 500 )) {
+      if (angle > UP_min)
         mode = MODE_OFF;
-      else if ((time-btnTime)>500 && (angle < DOWN_min))
+      else if (angle < DOWN_min)
         mode = MODE_FIREFLY;
-      else if((time-btnTime> 200))
+      else if((angle > DOWN_min) && (angle < UP_min))
         mode = MODE_BLINKING;
    }
    // Do the mode transitions
