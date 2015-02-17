@@ -27,3 +27,6 @@ hexbright_tilt.ino
 	
 	Enable DEBUG to see debug statements in serial console
 
+hexbright_4step.ino
+	Reversal of stock firmware.  Starts bright, each click lowering the
+	intensity until the 4th click of the button turns off the light. 
